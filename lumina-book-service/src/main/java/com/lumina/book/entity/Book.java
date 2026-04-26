@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
-// 告诉 MyBatis-Plus 这个类对应数据库里的 book 表
+// MyBatis-Plus 这个类对应数据库里的 book 表
 @TableName("book")
 public class Book {
 
@@ -16,7 +16,6 @@ public class Book {
     private Integer inventory;
     private String description;
 
-    // --- 下面是标准的 Getter 和 Setter 方法 ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

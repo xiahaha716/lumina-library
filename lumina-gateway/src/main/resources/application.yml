@@ -13,7 +13,7 @@ spring:
           predicates:
             - Path=/ai/**
 
-        # 这是我们新加的 图书 路由
+        # 这是新加的 图书 路由
         - id: book-service-route
           uri: http://localhost:8082
           predicates:
