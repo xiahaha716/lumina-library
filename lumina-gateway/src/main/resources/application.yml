@@ -1,0 +1,6 @@
+server:
+  port: 8888 # 我们的网关大门开在 8888 端口
+
+spring:
+  application:
+    name: lumina-gateway

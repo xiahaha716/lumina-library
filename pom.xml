@@ -7,26 +7,26 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.0</version> <relativePath/>
+        <version>3.3.0</version>
+        <relativePath/>
     </parent>
 
     <groupId>com.lumina</groupId>
     <artifactId>lumina-library-root</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging> <name>lumina-library-root</name>
+    <packaging>pom</packaging>
+    <name>lumina-library-root</name>
     <description>Lumina Library - AI-Powered Distributed Library System</description>
 
     <modules>
         <module>lumina-common</module>
-<!--        <module>lumina-api</module>-->
         <module>lumina-gateway</module>
-<!--        <module>lumina-book-service</module>-->
-<!--        <module>lumina-lending-service</module>-->
-<!--        <module>lumina-ai-service</module>-->
     </modules>
 
     <properties>
         <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <spring-cloud.version>2023.0.1</spring-cloud.version>
         <spring-cloud-alibaba.version>2023.0.1.0</spring-cloud-alibaba.version>
         <langchain4j.version>0.31.0</langchain4j.version>
