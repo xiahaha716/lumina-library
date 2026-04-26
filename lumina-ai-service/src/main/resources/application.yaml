@@ -1,0 +1,16 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: lumina-ai-service
+
+# LangChain4j 极简配置
+langchain4j:
+  open-ai:
+    chat-model:
+      # 这里我用 DeepSeek 的接口作为示例，你可以换成你自己的大模型厂商
+      base-url: https://api.deepseek.com/v1
+      api-key: sk-e6d4ec070a8a4c049cf9bf2e44fefc78
+      model-name: deepseek-chat
+      temperature: 0.7

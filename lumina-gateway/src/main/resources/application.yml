@@ -1,6 +1,13 @@
 server:
-  port: 8888 # 我们的网关大门开在 8888 端口
+  port: 8888
 
 spring:
   application:
     name: lumina-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: ai-service-route
+          uri: http://localhost:8081
+          predicates:
+            - Path=/ai/**

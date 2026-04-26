@@ -21,7 +21,8 @@
     <modules>
         <module>lumina-common</module>
         <module>lumina-gateway</module>
-    </modules>
+        <module>lumina-ai-service</module> </modules>
+
 
     <properties>
         <java.version>21</java.version>
