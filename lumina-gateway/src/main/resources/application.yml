@@ -7,7 +7,14 @@ spring:
   cloud:
     gateway:
       routes:
+        # 这是之前的 AI 路由
         - id: ai-service-route
           uri: http://localhost:8081
           predicates:
             - Path=/ai/**
+
+        # 这是我们新加的 图书 路由
+        - id: book-service-route
+          uri: http://localhost:8082
+          predicates:
+            - Path=/book/**
