@@ -20,9 +20,9 @@ public class AiController {
     @GetMapping(value = "/chat", produces = "application/json;charset=UTF-8")
     public Result<String> chat(@RequestParam String message) {
         try {
-            // TODO: 这里是你原本调用 AI 的代码，比如 assistant.chat(message)
+            // TODO: 这里是原本调用 AI 的代码，比如 assistant.chat(message)
             // 把 AI 返回的字符串存入 response 变量
-            String response = "这是 AI 给你的回复：" + message; // 此行为占位，请换回你真正的 AI 调用逻辑
+            String response = "这是 AI 给的回复：" + message; // 此行为占位，请换回你真正的 AI 调用逻辑
 
             // 用 Result.success() 把字符串包起来
             return Result.success(response);
