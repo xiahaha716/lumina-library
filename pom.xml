@@ -21,8 +21,8 @@
     <modules>
         <module>lumina-common</module>
         <module>lumina-gateway</module>
-        <module>lumina-ai-service</module> </modules>
-
+        <module>lumina-ai-service</module>
+    </modules>
 
     <properties>
         <java.version>21</java.version>
@@ -32,46 +32,43 @@
         <spring-cloud-alibaba.version>2023.0.1.0</spring-cloud-alibaba.version>
         <langchain4j.version>0.31.0</langchain4j.version>
         <redisson.version>3.27.2</redisson.version>
-    </properties>
+    </properties> <dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>${spring-cloud.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+            <version>${spring-cloud-alibaba.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
 
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring-cloud-alibaba.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-bom</artifactId>
+            <version>${langchain4j.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
 
-            <dependency>
-                <groupId>dev.langchain4j</groupId>
-                <artifactId>langchain4j-bom</artifactId>
-                <version>${langchain4j.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.lumina</groupId>
-                <artifactId>lumina-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.lumina</groupId>
-                <artifactId>lumina-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+        <dependency>
+            <groupId>com.lumina</groupId>
+            <artifactId>lumina-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lumina</groupId>
+            <artifactId>lumina-api</artifactId> <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
 
     <build>
         <plugins>

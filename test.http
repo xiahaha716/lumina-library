@@ -1,0 +1,13 @@
+### 测试添加图书
+POST http://localhost:8082/book/add
+Content-Type: application/json
+
+{
+  "title": "流浪地球",
+  "author": "刘慈欣",
+  "inventory": 20,
+  "description": "带上地球去流浪。"
+}
+
+### 测试删除图书 (请根据你数据库里真实的 ID 修改)
+DELETE http://localhost:8888/book/delete/6
