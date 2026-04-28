@@ -42,48 +42,80 @@
 </div>
 
 <script>
-  const { createApp, ref, nextTick } = Vue;
+  const { createApp, ref, nextTick, onMounted } = Vue;
+
+  // --- 1. 新增：Axios 全局拦截器 (亮票环节) ---
+  // 这一步保证了以后你代码里所有的 axios.get 都会自动在 Header 里带上 Token
+  axios.interceptors.request.use(config => {
+    const token = localStorage.getItem('lumina_token');
+    if (token) {
+      config.headers['Authorization'] = token;
+    }
+    return config;
+  }, error => {
+    return Promise.reject(error);
+  });
 
   createApp({
     setup() {
-      // 初始化聊天记录
       const messages = ref([
         { role: 'ai', content: '你好！我是 Lumina 智能图书管理员。你想找什么书？或者想了解目前的馆藏？' }
       ]);
       const inputText = ref('');
       const isLoading = ref(false);
 
-      // 发送消息的方法
+      // --- 2. 新增：自动领票方法 (办证环节) ---
+      const fetchToken = async () => {
+        try {
+          // 访问咱们刚写的假登录接口
+          const response = await axios.get('/login?username=测试用户');
+          if (response.data.code === 200) {
+            // 把拿到的 Bearer xxx 存入浏览器本地缓存
+            localStorage.setItem('lumina_token', response.data.token);
+            console.log("✅ 身份验证成功，已自动领票。");
+          }
+        } catch (e) {
+          console.error("❌ 自动领票失败，请检查网关是否开启了 /login 接口", e);
+        }
+      };
+
+      // 页面一加载，就去执行领票
+      onMounted(() => {
+        fetchToken();
+      });
+
       const sendMessage = async () => {
         const text = inputText.value.trim();
         if (!text) return;
 
-        // 1. 把用户的话显示在界面上
         messages.value.push({ role: 'user', content: text });
         inputText.value = '';
         isLoading.value = true;
         scrollToBottom();
 
         try {
-          // 2. 核心：向咱们的网关发送真正的 HTTP 请求！
-          // 注意：因为网页本身就在 8888 端口，所以直接写 /ai/chat 即可
           const response = await axios.get(`/ai/chat?message=${encodeURIComponent(text)}`);
 
-          // 3. 解析咱们之前写好的 Result 包装类
+          // 3. 核心：解析 Result 包装类 (解决 {} 包裹问题的关键)
+          // 确保这里是取出 response.data.data
           if (response.data.code === 200) {
             messages.value.push({ role: 'ai', content: response.data.data });
           } else {
             messages.value.push({ role: 'ai', content: '系统提示：' + response.data.message });
           }
         } catch (error) {
-          messages.value.push({ role: 'ai', content: '网络通讯失败，请检查后端服务是否启动。' });
+          // 如果被网关拦截了，会跳到这里
+          if (error.response && error.response.status === 401) {
+            messages.value.push({ role: 'ai', content: '🚫 网关提示：身份认证过期或无效，请刷新页面重新登录。' });
+          } else {
+            messages.value.push({ role: 'ai', content: '网络通讯失败，请检查后端服务是否启动。' });
+          }
         } finally {
           isLoading.value = false;
           scrollToBottom();
         }
       };
 
-      // 让聊天框始终滚动到最底部
       const scrollToBottom = () => {
         nextTick(() => {
           const box = document.getElementById('chatBox');

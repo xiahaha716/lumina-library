@@ -32,12 +32,13 @@
         <spring-cloud-alibaba.version>2023.0.1.0</spring-cloud-alibaba.version>
         <langchain4j.version>0.31.0</langchain4j.version>
         <redisson.version>3.27.2</redisson.version>
-    </properties> <dependencyManagement>
+    </properties>
+    <dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-dependencies</artifactId>
-            <version>${spring-cloud.version}</version>
+            <version>2023.0.1</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
