@@ -10,3 +10,10 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/lumina_library?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
+
+  # Redis缓存配置
+  # 连接本地Redis服务器，用于缓存图书数据、会话信息等
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379

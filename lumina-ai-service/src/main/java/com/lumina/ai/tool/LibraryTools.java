@@ -23,6 +23,8 @@ public class LibraryTools {
         System.out.println("====== AI 正在调用 [查询图书] 工具 ======");
         Result<Object> result = bookClient.listBooks();
         return result != null && result.getData() != null ? result.getData().toString() : "无数据";
+
+
     }
 
     // ================== 下面是新增的“机械臂”工具 ==================
@@ -55,4 +57,13 @@ public class LibraryTools {
         Result<String> result = bookClient.deleteBook(id);
         return "数据库执行结果：" + result.getMessage();
     }
+    @Tool("当用户想要借阅某本书籍时调用此工具。需要传入图书的唯一ID和用户的名字。")
+    public String borrowBookAction(@P("图书ID") Integer bookId, @P("借书人姓名") String username) {
+        // 这里用你现有的 FeignClient 去调用刚才写好的图书服务的 /borrow 接口
+        // 例如：return bookFeignClient.borrowBook(bookId, username);
+
+        System.out.println("🤖 AI 正在代为执行借书动作...");
+        return "模拟调用Feign：告诉用户借书请求已发送";
+    }
+
 }
