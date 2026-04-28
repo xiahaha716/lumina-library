@@ -8,6 +8,7 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import java.util.concurrent.TimeUnit;
 // ---------------------------------
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -19,10 +20,15 @@ public class BookController {
     // 1. 新增：声明 Redisson 客户端
     private final RedissonClient redissonClient;
 
-    // 2. 修改：通过构造函数，把 RedissonClient 一起注入进来
-    public BookController(BookMapper bookMapper, RedissonClient redissonClient) {
+    //  新增：发信员
+    private final RabbitTemplate rabbitTemplate;
+
+    // 2. 修改：通过构造函数，把 RabbitTemplate RedissonClient一起注入进来
+
+    public BookController(BookMapper bookMapper, RedissonClient redissonClient, RabbitTemplate rabbitTemplate) {
         this.bookMapper = bookMapper;
         this.redissonClient = redissonClient;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @GetMapping(value = "/list", produces = "application/json;charset=UTF-8")
@@ -82,13 +88,25 @@ public class BookController {
                 Thread.sleep(500);
 
                 System.out.println("✅ 借书成功，锁内业务处理完毕！");
-                // 为了通用，这里假设 Book 类有个 getName() 方法。如果没有，可以换成 book.getId()
+
+                // 3. 核心大招：借书成功，不用等发短信，直接往 MQ 里扔一张纸条就走！
+                try {
+                    String msg = "尊敬的用户 " + username;
+                    rabbitTemplate.convertAndSend("borrow.queue", msg);
+                    System.out.println("🚀 [主线程] 已将发送短信任务扔给 MQ，主业务瞬间返回！");
+                } catch (Exception e) {
+                    System.err.println("⚠️ 发送 MQ 消息失败，但不影响主业务：" + e.getMessage());
+                }
+                // ==============================================================
+
                 return Result.success("借书成功！图书 ID [" + book.getId() + "] 已发放入您的借阅清单。");
             } else {
                 System.out.println("⚠️ [" + username + "] 没抢到锁，触发限流，排队失败");
                 return Result.error("当前借阅该书的人数过多，系统繁忙，请稍后再试。");
             }
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("❌ 借书操作被中断：" + e.getMessage());
             return Result.error("系统发生异常，请联系管理员。");
         } finally {
             // 极其关键：业务执行完，必须释放锁！且只能释放自己加的锁！
